@@ -174,14 +174,14 @@
   },
 
  {
-    "comment": "A.12.  Adding to a Non-existant Target",
+    "comment": "A.12.  Adding to a Non-existent Target",
     "doc": {
   "foo": "bar"
 },
     "patch": [
   { "op": "add", "path": "/baz/bat", "value": "qux" }
 ],
-    "error": "add to a non-existant target"
+    "error": "add to a non-existent target"
   },
 
  {
