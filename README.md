@@ -1,8 +1,9 @@
 JSON Patch Tests
 ================
 
-These are test cases for implementations of the [IETF JSON Patch
-draft](http://tools.ietf.org/html/draft-ietf-appsawg-json-patch).
+These are test cases for implementations of [IETF JSON Patch (RFC6902)](http://tools.ietf.org/html/rfc6902).
+
+Some implementations can be found at [jsonpatch.com](http://jsonpatch.com).
 
 
 Test Format
@@ -21,7 +22,23 @@ test record is an object with the following members:
 All fields except 'doc' and 'patch' are optional. Test records consisting only
 of a comment are also OK.
 
-These tests are not complete, or even correct - help welcome!
+
+Writing Tests
+-------------
+
+All tests should have a descriptive comment.  Tests should be as
+simple as possible - just what's required to test a specific piece of
+behavior.  If you want to test interacting behaviors, create tests for
+each behavior as well as the interaction.
+
+If an 'error' member is specified, the error text should describe the
+error the implementation should raise - *not* what's being tested.
+Implementation error strings will vary, but the suggested error should
+be easily matched to the implementation error string.  Try to avoid
+creating error tests that might pass because an incorrect error was
+reported.
+
+Please feel free to contribute!
 
 
 Credits
@@ -35,7 +52,7 @@ extended by [Mike McCabe](https://github.com/mikemccabe).
 License
 -------
 
-   Copyright 2012 The Authors
+   Copyright 2014 The Authors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
