@@ -81,35 +81,6 @@
     ]
   },
   {
-    "comment": "a.6. moving a value",
-    "disabled": true,
-    "doc": {
-      "foo": {
-        "bar": "baz",
-        "waldo": "fred"
-      },
-      "qux": {
-        "corge": "grault"
-      }
-    },
-    "expected": {
-      "foo": {
-        "bar": "baz"
-      },
-      "qux": {
-        "corge": "grault",
-        "thud": "fred"
-      }
-    },
-    "patch": [
-      {
-        "from": "/foo/waldo",
-        "op": "move",
-        "path": "/qux/thud"
-      }
-    ]
-  },
-  {
     "comment": "a.7. moving an array element",
     "doc": {
       "foo": [

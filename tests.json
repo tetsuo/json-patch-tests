@@ -60,20 +60,7 @@
     "extend": [ "foo" ]
   },
   {
-    "comment": "Toplevel scalar values OK?",
-    "scalar": true,
-    "doc": "foo",
-    "expected": "bar",
-    "patch": [
-      {
-        "op": "replace",
-        "path": "",
-        "value": "bar"
-      }
-    ]
-  },
-  {
-    "comment": "Add, / target",
+    "comment": "add, / target",
     "doc": {},
     "expected": {
       "": 1
@@ -85,10 +72,10 @@
         "value": 1
       }
     ],
-    "extend": [ "\"\"" ]
+    "extend": [ "" ]
   },
   {
-    "comment": "Add composite value at top level",
+    "comment": "add composite value at top level",
     "doc": {
       "foo": 1
     },
@@ -112,7 +99,7 @@
     "extend": [ "bar" ]
   },
   {
-    "comment": "Add into composite value",
+    "comment": "add into composite value",
     "doc": {
       "baz": [
         {
@@ -136,7 +123,8 @@
         "path": "/baz/0/foo",
         "value": "world"
       }
-    ]
+    ],
+    "extend": [ "baz/0/foo" ]
   },
   {
     "doc": {
@@ -145,7 +133,7 @@
         2
       ]
     },
-    "error": "Out of bounds (upper)",
+    "comment": "out of bounds (upper)",
     "patch": [
       {
         "op": "add",
@@ -161,7 +149,7 @@
         2
       ]
     },
-    "error": "Out of bounds (lower)",
+    "comment": "out of bounds (lower)",
     "patch": [
       {
         "op": "add",
@@ -184,7 +172,8 @@
         "path": "/bar",
         "value": true
       }
-    ]
+    ],
+    "extend": [ "bar" ]
   },
   {
     "doc": {
@@ -200,7 +189,8 @@
         "path": "/bar",
         "value": false
       }
-    ]
+    ],
+    "extend": [ "bar" ]
   },
   {
     "doc": {
@@ -216,7 +206,8 @@
         "path": "/bar",
         "value": null
       }
-    ]
+    ],
+    "extend": [ "bar" ]
   },
   {
     "comment": "0 can be an array index or object element name",
@@ -233,7 +224,8 @@
         "path": "/0",
         "value": "bar"
       }
-    ]
+    ],
+    "extend": [ "0" ]
   },
   {
     "doc": [
@@ -322,51 +314,6 @@
     ]
   },
   {
-    "comment": "test against implementation-specific numeric parsing",
-    "doc": {
-      "1e0": "foo"
-    },
-    "expected": {
-      "1e0": "foo"
-    },
-    "patch": [
-      {
-        "op": "test",
-        "path": "/1e0",
-        "value": "foo"
-      }
-    ]
-  },
-  {
-    "comment": "test with bad number should fail",
-    "doc": [
-      "foo",
-      "bar"
-    ],
-    "error": "test op shouldn't get array element 1",
-    "patch": [
-      {
-        "op": "test",
-        "path": "/1e0",
-        "value": "bar"
-      }
-    ]
-  },
-  {
-    "doc": [
-      "foo",
-      "sil"
-    ],
-    "error": "Object operation on array target",
-    "patch": [
-      {
-        "op": "add",
-        "path": "/bar",
-        "value": 42
-      }
-    ]
-  },
-  {
     "comment": "value in array add not flattened",
     "doc": [
       "foo",
@@ -388,48 +335,6 @@
           "bar",
           "baz"
         ]
-      }
-    ]
-  },
-  {
-    "doc": {
-      "bar": [
-        1,
-        2,
-        3,
-        4
-      ],
-      "foo": 1
-    },
-    "expected": {
-      "foo": 1
-    },
-    "patch": [
-      {
-        "op": "remove",
-        "path": "/bar"
-      }
-    ]
-  },
-  {
-    "doc": {
-      "baz": [
-        {
-          "qux": "hello"
-        }
-      ],
-      "foo": 1
-    },
-    "expected": {
-      "baz": [
-        {}
-      ],
-      "foo": 1
-    },
-    "patch": [
-      {
-        "op": "remove",
-        "path": "/baz/0/qux"
       }
     ]
   },
@@ -603,41 +508,6 @@
     ]
   },
   {
-    "comment": "replace whole document",
-    "doc": {
-      "foo": "bar"
-    },
-    "expected": {
-      "baz": "qux"
-    },
-    "patch": [
-      {
-        "op": "replace",
-        "path": "",
-        "value": {
-          "baz": "qux"
-        }
-      }
-    ]
-  },
-  {
-    "comment": "spurious patch properties",
-    "doc": {
-      "foo": 1
-    },
-    "expected": {
-      "foo": 1
-    },
-    "patch": [
-      {
-        "op": "test",
-        "path": "/foo",
-        "spurious": 1,
-        "value": 1
-      }
-    ]
-  },
-  {
     "comment": "null value should be valid obj property",
     "doc": {
       "foo": null
@@ -667,22 +537,6 @@
     ]
   },
   {
-    "comment": "null value should be valid obj property to be moved",
-    "doc": {
-      "foo": null
-    },
-    "expected": {
-      "bar": null
-    },
-    "patch": [
-      {
-        "from": "/foo",
-        "op": "move",
-        "path": "/bar"
-      }
-    ]
-  },
-  {
     "comment": "null value should be valid obj property to be copied",
     "doc": {
       "foo": null
@@ -697,20 +551,8 @@
         "op": "copy",
         "path": "/bar"
       }
-    ]
-  },
-  {
-    "comment": "null value should be valid obj property to be removed",
-    "doc": {
-      "foo": null
-    },
-    "expected": {},
-    "patch": [
-      {
-        "op": "remove",
-        "path": "/foo"
-      }
-    ]
+    ],
+    "extend": [ "bar" ]
   },
   {
     "comment": "null value should still be valid obj property replace other value",
@@ -729,115 +571,7 @@
     ]
   },
   {
-    "comment": "test should pass despite rearrangement",
-    "doc": {
-      "foo": {
-        "bar": 2,
-        "foo": 1
-      }
-    },
-    "patch": [
-      {
-        "op": "test",
-        "path": "/foo",
-        "value": {
-          "bar": 2,
-          "foo": 1
-        }
-      }
-    ]
-  },
-  {
-    "comment": "test should pass despite (nested) rearrangement",
-    "doc": {
-      "foo": [
-        {
-          "bar": 2,
-          "foo": 1
-        }
-      ]
-    },
-    "patch": [
-      {
-        "op": "test",
-        "path": "/foo",
-        "value": [
-          {
-            "bar": 2,
-            "foo": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "comment": "test should pass - no error",
-    "doc": {
-      "foo": {
-        "bar": [
-          1,
-          2,
-          5,
-          4
-        ]
-      }
-    },
-    "patch": [
-      {
-        "op": "test",
-        "path": "/foo",
-        "value": {
-          "bar": [
-            1,
-            2,
-            5,
-            4
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "doc": {
-      "foo": {
-        "bar": [
-          1,
-          2,
-          5,
-          4
-        ]
-      }
-    },
-    "error": "test op should fail",
-    "patch": [
-      {
-        "op": "test",
-        "path": "/foo",
-        "value": [
-          1,
-          2
-        ]
-      }
-    ]
-  },
-  {
-    "comment": "Whole document",
-    "disabled": true,
-    "doc": {
-      "foo": 1
-    },
-    "patch": [
-      {
-        "op": "test",
-        "path": "",
-        "value": {
-          "foo": 1
-        }
-      }
-    ]
-  },
-  {
-    "comment": "Empty-string element",
+    "comment": "empty-string element",
     "doc": {
       "": 1
     },
@@ -927,7 +661,7 @@
     ]
   },
   {
-    "comment": "Move to same location has no effect",
+    "comment": "move to same location has no effect",
     "doc": {
       "foo": 1
     },
@@ -943,102 +677,7 @@
     ]
   },
   {
-    "doc": {
-      "baz": [
-        {
-          "qux": "hello"
-        }
-      ],
-      "foo": 1
-    },
-    "expected": {
-      "bar": 1,
-      "baz": [
-        {
-          "qux": "hello"
-        }
-      ]
-    },
-    "patch": [
-      {
-        "from": "/foo",
-        "op": "move",
-        "path": "/bar"
-      }
-    ]
-  },
-  {
-    "doc": {
-      "bar": 1,
-      "baz": [
-        {
-          "qux": "hello"
-        }
-      ]
-    },
-    "expected": {
-      "bar": 1,
-      "baz": [
-        {},
-        "hello"
-      ]
-    },
-    "patch": [
-      {
-        "from": "/baz/0/qux",
-        "op": "move",
-        "path": "/baz/1"
-      }
-    ]
-  },
-  {
-    "doc": {
-      "bar": 1,
-      "baz": [
-        {
-          "qux": "hello"
-        }
-      ]
-    },
-    "expected": {
-      "bar": 1,
-      "baz": [
-        {
-          "qux": "hello"
-        }
-      ],
-      "boo": {
-        "qux": "hello"
-      }
-    },
-    "patch": [
-      {
-        "from": "/baz/0",
-        "op": "copy",
-        "path": "/boo"
-      }
-    ]
-  },
-  {
-    "comment": "replacing the root of the document is possible with add",
-    "doc": {
-      "foo": "bar"
-    },
-    "expected": {
-      "baz": "qux"
-    },
-    "patch": [
-      {
-        "op": "add",
-        "path": "",
-        "value": {
-          "baz": "qux"
-        }
-      }
-    ]
-  },
-  {
-    "comment": "Adding to \"/-\" adds to the end of the array",
+    "comment": "adding to \"/-\" adds to the end of the array",
     "doc": [
       1,
       2
@@ -1067,7 +706,7 @@
     ]
   },
   {
-    "comment": "Adding to \"/-\" adds to the end of the array, even n levels down",
+    "comment": "adding to \"/-\" adds to the end of the array, even n levels down",
     "doc": [
       1,
       2,
@@ -1106,24 +745,6 @@
             "baz"
           ]
         }
-      }
-    ]
-  },
-  {
-    "comment": "test remove with bad number should fail",
-    "doc": {
-      "baz": [
-        {
-          "qux": "hello"
-        }
-      ],
-      "foo": 1
-    },
-    "error": "remove op shouldn't remove from array with bad number",
-    "patch": [
-      {
-        "op": "remove",
-        "path": "/baz/1e0/qux"
       }
     ]
   },
@@ -1217,7 +838,8 @@
         "op": "copy",
         "path": "/boo"
       }
-    ]
+    ],
+    "extend": [ "boo" ]
   },
   {
     "comment": "test move with bad number should fail",
@@ -1251,114 +873,6 @@
         "op": "add",
         "path": "/1e0",
         "value": "bar"
-      }
-    ]
-  },
-  {
-    "comment": "missing 'value' parameter to add",
-    "doc": [
-      1
-    ],
-    "error": "missing 'value' parameter",
-    "patch": [
-      {
-        "op": "add",
-        "path": "/-"
-      }
-    ]
-  },
-  {
-    "comment": "missing 'value' parameter to replace",
-    "doc": [
-      1
-    ],
-    "error": "missing 'value' parameter",
-    "patch": [
-      {
-        "op": "replace",
-        "path": "/0"
-      }
-    ]
-  },
-  {
-    "comment": "missing 'value' parameter to test",
-    "doc": [
-      null
-    ],
-    "error": "missing 'value' parameter",
-    "patch": [
-      {
-        "op": "test",
-        "path": "/0"
-      }
-    ]
-  },
-  {
-    "comment": "missing value parameter to test - where undef is falsy",
-    "doc": [
-      false
-    ],
-    "error": "missing 'value' parameter",
-    "patch": [
-      {
-        "op": "test",
-        "path": "/0"
-      }
-    ]
-  },
-  {
-    "comment": "missing from parameter to copy",
-    "doc": [
-      1
-    ],
-    "error": "missing 'from' parameter",
-    "patch": [
-      {
-        "op": "copy",
-        "path": "/-"
-      }
-    ]
-  },
-  {
-    "comment": "missing from parameter to move",
-    "doc": {
-      "foo": 1
-    },
-    "error": "missing 'from' parameter",
-    "patch": [
-      {
-        "op": "move",
-        "path": ""
-      }
-    ]
-  },
-  {
-    "comment": "duplicate ops",
-    "disabled": true,
-    "doc": {
-      "foo": "bar"
-    },
-    "error": "patch has two 'op' members",
-    "patch": [
-      {
-        "from": "/foo",
-        "op": "move",
-        "path": "/baz",
-        "value": "qux"
-      }
-    ]
-  },
-  {
-    "comment": "unrecognized op should fail",
-    "doc": {
-      "foo": 1
-    },
-    "error": "Unrecognized op 'spam'",
-    "patch": [
-      {
-        "op": "spam",
-        "path": "/foo",
-        "value": 1
       }
     ]
   }
